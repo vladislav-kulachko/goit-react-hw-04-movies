@@ -5,8 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Fuse from './components/Fuse/Fuse';
 import Navigation from './components/Navigation/Navigation';
 import PopularMoviesView from './pages/PopularMovies/PopularMoviesView';
-import FoundMoviesView from './pages/FoundMovies/FoundMovies';
+// import FoundMoviesView from './pages/FoundMoviesView/FoundMoviesView';
 import NotFound from './pages/NotFound/NotFound';
+import DetailsMovieView from './pages/DetailsMovie/DetailsMovieView';
+import SearchMovies from './components/SearchMovies/SearchMovies';
 
 export default function App() {
   const [status, setStatus] = useState('idle');
@@ -18,8 +20,12 @@ export default function App() {
         <Route path="/" exact>
           <PopularMoviesView></PopularMoviesView>
         </Route>
-        <Route to="/movies">
-          <FoundMoviesView></FoundMoviesView>
+        <Route path="/movies" exact>
+          {/* <FoundMoviesView></FoundMoviesView> */}
+          <SearchMovies></SearchMovies>
+        </Route>
+        <Route path="/movies/:movieId">
+          <DetailsMovieView></DetailsMovieView>
         </Route>
         <Route>
           <NotFound></NotFound>

@@ -1,10 +1,14 @@
 import {useState} from 'react';
+import {Link, Route, useHistory, useLocation} from 'react-router-dom';
 import s from './SearchMovies.module.scss';
 import SearchIcon from '@material-ui/icons/Search';
 import {toast, Flip} from 'react-toastify';
+import FoundMoviesView from '../../pages/FoundMoviesView/FoundMoviesView';
 
-export default function SearchMovies({onQueryUpdate}) {
+export default function SearchMovies() {
   const [query, setQuery] = useState('');
+  const history = useHistory();
+  const location = useLocation();
   const submitHandler = e => {
     e.preventDefault();
     if (query.trim() === '') {
@@ -16,7 +20,8 @@ export default function SearchMovies({onQueryUpdate}) {
         toastId: 1,
       });
     } else {
-      onQueryUpdate(query);
+      history.push({...location, search: `query=${query}`});
+      // onQueryUpdate(query);
     }
     setQuery('');
   };
@@ -24,19 +29,22 @@ export default function SearchMovies({onQueryUpdate}) {
     setQuery(e.target.value.toLowerCase());
   };
   return (
-    <form className={s.searchForm} onSubmit={submitHandler}>
-      <button type="submit" className={s.button}>
-        <SearchIcon style={{fontSize: 36, color: '#3f51b5'}}></SearchIcon>
-      </button>
-      <input
-        onChange={inputHandler}
-        value={query}
-        className={s.input}
-        type="text"
-        autoComplete="off"
-        autoFocus
-        placeholder="Search movies"
-      />
-    </form>
+    <>
+      <form className={s.searchForm} onSubmit={submitHandler}>
+        <input
+          onChange={inputHandler}
+          value={query}
+          className={s.input}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search movies"
+        />
+        <button type="submit" className={s.button}>
+          <SearchIcon style={{fontSize: 26, color: 'yellowgreen'}}></SearchIcon>
+        </button>
+      </form>
+      <FoundMoviesView query={query}></FoundMoviesView>
+    </>
   );
 }

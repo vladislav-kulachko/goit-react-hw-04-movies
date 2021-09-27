@@ -8,12 +8,16 @@ export async function fetchTrendMovies() {
 }
 export async function fetchQueryMovies(query) {
   const res = await fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${query}`,
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`,
   );
   const {results} = await res.json();
   const movies = results;
   return movies;
 }
-export async function fetchMovieDetails() {}
+export async function fetchMovieDetails(movieId) {
+  const res = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`);
+  const movie = await res.json();
+  return movie;
+}
 export async function fetchMovieCredits() {}
 export async function fetchMovieRevies() {}
