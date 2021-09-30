@@ -1,36 +1,53 @@
-import {useState, useEffect} from 'react';
-import './App.scss';
 import {Route, Switch} from 'react-router-dom';
+import {lazy, Suspense} from 'react';
+import './App.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import Fuse from './components/Fuse/Fuse';
 import Navigation from './components/Navigation/Navigation';
-import PopularMoviesView from './pages/PopularMovies/PopularMoviesView';
-// import FoundMoviesView from './pages/FoundMoviesView/FoundMoviesView';
-import NotFound from './pages/NotFound/NotFound';
-import DetailsMovieView from './pages/DetailsMovie/DetailsMovieView';
-import SearchMovies from './components/SearchMovies/SearchMovies';
+import NotFoundViews from './pages/NotFound/NotFoundViews';
+import {ToastContainer} from 'react-toastify';
+
+const PopularMoviesViews = lazy(() =>
+  import('./pages/PopularMovies/PopularMoviesViews'),
+);
+const DetailsMovieViews = lazy(() =>
+  import('./pages/DetailsMovie/DetailsMovieViews'),
+);
+const FoundMoviesViews = lazy(() =>
+  import('./pages/FoundMovies/FoundMoviesViews'),
+);
+const SearchMovies = lazy(() =>
+  import('./components/SearchMovies/SearchMovies'),
+);
+const Fuse = lazy(() => import('./components/Fuse/Fuse'));
 
 export default function App() {
-  const [status, setStatus] = useState('idle');
-
   return (
     <section className="App">
       <Navigation></Navigation>
-      <Switch>
-        <Route path="/" exact>
-          <PopularMoviesView></PopularMoviesView>
-        </Route>
-        <Route path="/movies" exact>
-          {/* <FoundMoviesView></FoundMoviesView> */}
-          <SearchMovies></SearchMovies>
-        </Route>
-        <Route path="/movies/:movieId">
-          <DetailsMovieView></DetailsMovieView>
-        </Route>
-        <Route>
-          <NotFound></NotFound>
-        </Route>
-      </Switch>
+      <Suspense fallback={<div>load...</div>}>
+        <Switch>
+          <Route path="/" exact>
+            <Fuse>
+              <PopularMoviesViews></PopularMoviesViews>
+            </Fuse>
+          </Route>
+          <Route path="/movies" exact>
+            <SearchMovies></SearchMovies>
+            <Fuse>
+              <FoundMoviesViews></FoundMoviesViews>
+            </Fuse>
+          </Route>
+          <Route path="/movies/:movieId">
+            <Fuse>
+              <DetailsMovieViews></DetailsMovieViews>
+            </Fuse>
+          </Route>
+          <Route>
+            <NotFoundViews></NotFoundViews>
+          </Route>
+        </Switch>
+      </Suspense>
+      <ToastContainer></ToastContainer>
     </section>
   );
 }

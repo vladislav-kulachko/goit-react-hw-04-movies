@@ -15,8 +15,8 @@ export default class Fuse extends Component {
       return (
         <div>
           <h2>
-            Упс..! Скорее всего сервер вернул кривой JSON или массив и я не могу
-            его отрендерить. Повторите запрос.
+            Упс... :( По данному запросу сервер вернул данные которые обработаны
+            с ошибкой. Повторите запрос.
           </h2>
           <details style={{whiteSpace: 'pre-wrap'}}>
             {this.state.error && this.state.error.toString()}
