@@ -1,0 +1,17 @@
+.container {
+  padding: 20px;
+}
+.listlist {
+  padding-left: 40px;
+  list-style: decimal;
+}
+.item {
+  margin-bottom: 5px;
+  &:hover {
+    color: yellowgreen;
+    text-decoration: underline;
+  }
+  &:active {
+    color: red;
+  }
+}

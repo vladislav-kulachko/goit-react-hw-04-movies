@@ -9,6 +9,8 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import s from './DetailsMovieViews.module.scss';
+import posterNotFound from '../../img/error-404-poster-not-found.jpg';
 
 const CastViews = lazy(() => import('../Cast/CastViews'));
 const ReviewsViews = lazy(() => import('../Reviews/ReviewsViews'));
@@ -22,7 +24,7 @@ export default function DetailsMovieViews() {
   const history = useHistory();
   const prevPage = location?.state?.prevPage;
   const label = location?.state?.label;
-  console.log(errorMessage);
+
   useEffect(() => {
     if (movieId) {
       setStatus('pending');
@@ -45,55 +47,71 @@ export default function DetailsMovieViews() {
   };
 
   return (
-    <section>
+    <section className={s.container}>
       {status === 'pending' && <Loader></Loader>}
       {status === 'resolved' && (
         <>
-          <button type="button" onClick={onClickGo}>
-            {label ?? 'Back to main page'}
+          <button className={s.btnBack} type="button" onClick={onClickGo}>
+            {`< ${label}` ?? '< Back to main page'}
           </button>
-          <article>
-            <h1>
-              {movie.title} ({movie.release_date.slice(0, 4)})
-            </h1>
-            <h2>Overview</h2>
-            <p>{movie.overview}</p>
-            <h2>Genres</h2>
-            <ul>
-              {movie.genres.map(({name, id}) => (
-                <li key={id}>{name}</li>
-              ))}
-            </ul>
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-              alt={movie.title}
-            />
+          <article className={s.movieCard}>
+            {movie.poster_path ? (
+              <img
+                className={s.poster}
+                src={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
+                alt={movie.title}
+              />
+            ) : (
+              <img className={s.poster} src={posterNotFound} alt="no poster" />
+            )}
+
+            <section className={s.movieInfo}>
+              <h1 className={s.title}>
+                {movie.title}
+                {` (${movie.release_date.slice(0, 4)})`}
+              </h1>
+              <h2 className={s.overviewTitle}>Overview:</h2>
+              <p className={s.overviewText}>{movie.overview}</p>
+              <h2 className={s.genresTitle}>Genres:</h2>
+              <ul className={s.genresList}>
+                {movie.genres.map(({name, id}) => (
+                  <li className={s.genresItem} key={id}>
+                    {name}&emsp;
+                  </li>
+                ))}
+              </ul>
+            </section>
           </article>
-          <ul>
-            Additional information
-            <li>
-              <NavLink
-                exact
-                to={{
-                  pathname: `/movies/${movieId}/cast`,
-                  state: {prevPage, label},
-                }}
-              >
-                Cast
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                exact
-                to={{
-                  pathname: `/movies/${movieId}/review`,
-                  state: {prevPage, label},
-                }}
-              >
-                Review
-              </NavLink>
-            </li>
-          </ul>
+
+          <section className={s.addInfo}>
+            <h3 className={s.addInfoTitle}>Additional information</h3>
+            <ul className={s.addInfoList}>
+              <li className={s.addInfoListLink}>
+                <NavLink
+                  activeClassName={s.activeLink}
+                  exact
+                  to={{
+                    pathname: `/movies/${movieId}/cast`,
+                    state: {prevPage, label},
+                  }}
+                >
+                  Cast
+                </NavLink>
+              </li>
+              <li className={s.addInfoListLink}>
+                <NavLink
+                  activeClassName={s.activeLink}
+                  exact
+                  to={{
+                    pathname: `/movies/${movieId}/review`,
+                    state: {prevPage, label},
+                  }}
+                >
+                  Review
+                </NavLink>
+              </li>
+            </ul>
+          </section>
           <Suspense fallback={<div>load...</div>}>
             <Switch>
               <Route exact path="/movies/:movieId/cast">

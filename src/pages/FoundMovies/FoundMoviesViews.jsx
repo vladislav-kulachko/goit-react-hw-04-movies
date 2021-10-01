@@ -3,6 +3,7 @@ import {Link, useLocation} from 'react-router-dom';
 import {fetchQueryMovies} from '../../Api/Api';
 import Loader from '../../components/Loader/Loader';
 import {toast, Flip} from 'react-toastify';
+import s from './FoundMoviesViews.module.scss';
 
 export default function FoundMoviesViews() {
   const [movies, setMovies] = useState(null);
@@ -30,7 +31,7 @@ export default function FoundMoviesViews() {
 
   useEffect(() => {
     if (status === 'rejected') {
-      toast.error(`No movies found for ${query}`, {
+      toast.error(`Not found movies for this request ${query}, try yet `, {
         theme: 'colored',
         position: 'bottom-center',
         autoClose: 5000,
@@ -41,12 +42,12 @@ export default function FoundMoviesViews() {
   }, [query, status]);
 
   return (
-    <section>
+    <section className={s.container}>
       {status === 'pending' && <Loader></Loader>}
-      <ul>
+      <ol className={s.list}>
         {status === 'resolved' &&
           movies.map(({title, id}) => (
-            <li key={id}>
+            <li key={id} className={s.item}>
               <Link
                 to={{
                   pathname: `/movies/${id}`,
@@ -58,9 +59,9 @@ export default function FoundMoviesViews() {
             </li>
           ))}
         {status === 'rejected' && (
-          <li>Not found movies for this request, try yet :( </li>
+          <li>{`Not found movies for this request ${query} :( , try yet`}</li>
         )}
-      </ul>
+      </ol>
     </section>
   );
 }
