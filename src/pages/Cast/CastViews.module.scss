@@ -3,16 +3,16 @@
 }
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 20px;
 }
 .item {
-  outline: 2px solid yellowgreen;
+  border: 2px solid yellowgreen;
+  border-radius: 4px;
 }
 .imgContainer {
   width: 100%;
-  height: 200px;
-  margin-bottom: 5px;
+  height: 250px;
 }
 .avatar {
   width: 100%;
@@ -22,12 +22,11 @@
 .info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 5px;
+  padding: 10px;
 }
 .name {
   font-weight: 500;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .character {
   font-size: small;
