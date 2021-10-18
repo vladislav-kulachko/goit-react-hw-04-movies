@@ -6,10 +6,10 @@ export default function Spinner() {
       <div className={s.spinner}>
         <Loader
           type="Grid"
-          color="#3f51b5"
+          color="yellowgreen"
           height={100}
           width={100}
-          timeout={2000}
+          timeout={3000}
         />
       </div>
     </>
